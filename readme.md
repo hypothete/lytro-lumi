@@ -1,5 +1,7 @@
 # Lytro Lumigraph
 
+# [Try it out here!](https://hypothete.github.io/lytro-lumi/)
+
 ![Cropped image of flowers in a garden. The Lytro mircolens array breaks it up into several tiny images](public/flowers-closeup.jpg)
 
 The Lytro Lumigraph is an experimental structured lumigraph used for rendering images from the original [Lytro light field camera](https://en.wikipedia.org/wiki/Lytro). This project was developed as part of my entry for the Bluesky 2026 Shitty Camera Challenge. I'm fascinated by light field capture and rendering techniques, and so I couldn't turn down an opportunity to dust off my Lytro and put it through its paces.

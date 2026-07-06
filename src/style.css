@@ -5,6 +5,14 @@ body {
   align-items: center;
 }
 
+a {
+  color: #ccc;
+}
+
+a:visited {
+  color: #aaa;
+}
+
 main {
   display: flex;
   flex-direction: row;
