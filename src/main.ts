@@ -1,19 +1,46 @@
 import * as THREE from "three/webgpu";
-import { distance, float, instancedArray, instanceIndex, step, texture, uniform, uv, vec2 } from "three/tsl";
+import {
+  distance,
+  float,
+  instancedArray,
+  instanceIndex,
+  pass,
+  step,
+  texture,
+  uniform,
+  uv,
+  vec2,
+} from "three/tsl";
 import "./style.css";
 import { buildDots } from "./dots";
+import { overlapPass } from "./overlapPass";
 
 const { dots, flatDots } = buildDots();
 const dotsArray = instancedArray(flatDots, "vec2");
 
-const zoominCheckbox: HTMLInputElement | null = document.querySelector("#zoomin");
-const apertureSlider: HTMLInputElement | null = document.querySelector("#aperture");
+const zoominCheckbox: HTMLInputElement | null =
+  document.querySelector("#zoomin");
+const renderpassCheckbox: HTMLInputElement | null =
+  document.querySelector("#renderpass");
+const apertureSlider: HTMLInputElement | null =
+  document.querySelector("#aperture");
 const focusSlider: HTMLInputElement | null = document.querySelector("#focus");
-const xOffsetSlider: HTMLInputElement | null = document.querySelector("#xoffset");
-const yOffsetSlider: HTMLInputElement | null = document.querySelector("#yoffset");
+const xOffsetSlider: HTMLInputElement | null =
+  document.querySelector("#xoffset");
+const yOffsetSlider: HTMLInputElement | null =
+  document.querySelector("#yoffset");
+
+// Renderer setup
 
 const scene = new THREE.Scene();
-const camera = new THREE.OrthographicCamera(0, 1, 1, 0, 1, -1);
+const camera = new THREE.OrthographicCamera(
+  0,
+  zoominCheckbox?.checked ? 0.01 : 1,
+  zoominCheckbox?.checked ? 0.01 : 1,
+  0,
+  1,
+  -1,
+);
 
 const renderer = new THREE.WebGPURenderer({ antialias: true });
 renderer.setSize(820, 820);
@@ -22,10 +49,13 @@ renderer.setAnimationLoop(render);
 document.body.appendChild(renderer.domElement);
 
 const geometry = new THREE.PlaneGeometry(0.01, 0.01);
-const material = new THREE.MeshBasicNodeMaterial({
-  // color: 0x300000,
-  blending: THREE.AdditiveBlending,
-  depthWrite: false,
+
+// Lumigraph material
+
+const rgbMaterial = new THREE.MeshBasicNodeMaterial({
+  blending: THREE.AdditiveBlending, // stack RGB values where microlenses overlap
+  // we will divide by the overlapPass to normalize these values later
+  depthWrite: false
 });
 
 const textureLoader = new THREE.TextureLoader();
@@ -33,16 +63,28 @@ const imgTex = textureLoader.load("public/test.png");
 
 const focusUniform = uniform(Number(focusSlider?.value || 1));
 const apertureUniform = uniform(Number(apertureSlider?.value || 1));
-const offsetUniform = uniform(new THREE.Vector2(Number(xOffsetSlider?.value || 0), Number(yOffsetSlider?.value || 0)));
+const offsetUniform = uniform(
+  new THREE.Vector2(
+    Number(xOffsetSlider?.value || 0),
+    Number(yOffsetSlider?.value || 0),
+  ),
+);
 
 const texNode = texture(
   imgTex,
-  dotsArray.element(instanceIndex).add(offsetUniform.div(1000)).sub(uv().sub(0.5).div(1000).mul(focusUniform)),
+  dotsArray
+    .element(instanceIndex)
+    .add(offsetUniform.div(1000))
+    .sub(uv().sub(0.5).div(1000).mul(focusUniform)),
 );
 
-material.colorNode = texNode.mul(step(apertureUniform.div(200), float(0.5).sub(distance(vec2(0.5),uv()))));
+rgbMaterial.colorNode = texNode.mul(
+  step(apertureUniform.div(200), float(0.5).sub(distance(vec2(0.5), uv()))),
+);
 
-const instances = new THREE.InstancedMesh(geometry, material, dots.length);
+// Mesh setup
+
+const instances = new THREE.InstancedMesh(geometry, rgbMaterial, dots.length);
 
 dots.forEach((dot, dotIndex) => {
   const posMatrix = new THREE.Matrix4();
@@ -50,41 +92,63 @@ dots.forEach((dot, dotIndex) => {
   instances.setMatrixAt(dotIndex, posMatrix);
 });
 
-instances.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
 instances.instanceMatrix.needsUpdate = true;
 scene.add(instances);
+
+// Render pipeline
+
+const renderPipeline = new THREE.RenderPipeline(renderer);
+const scenePass = pass(scene, camera);
+const countPass = overlapPass(scene, camera);
+renderPipeline.outputNode = renderpassCheckbox?.checked ? countPass : scenePass.div(countPass.r);
+
+// Event listeners
 
 apertureSlider?.addEventListener("input", () => {
   apertureUniform.value = Number(apertureSlider?.value || 0);
   apertureUniform.needsUpdate = true;
-  renderer.render(scene, camera);
+  countPass.updateAperture(Number(apertureSlider?.value || 0));
+  renderPipeline.render();
 });
 
 focusSlider?.addEventListener("input", () => {
   focusUniform.value = Number(focusSlider?.value || 0);
   focusUniform.needsUpdate = true;
-  renderer.render(scene, camera);
+  renderPipeline.render();
 });
 
 xOffsetSlider?.addEventListener("input", () => {
   offsetUniform.value.x = Number(xOffsetSlider?.value || 0);
   focusUniform.needsUpdate = true;
-  renderer.render(scene, camera);
+  renderPipeline.render();
 });
 
 yOffsetSlider?.addEventListener("input", () => {
   offsetUniform.value.y = Number(yOffsetSlider?.value || 0);
   focusUniform.needsUpdate = true;
-  renderer.render(scene, camera);
+  renderPipeline.render();
 });
 
 zoominCheckbox?.addEventListener("input", () => {
   camera.right = zoominCheckbox.checked ? 0.1 : 1;
   camera.top = zoominCheckbox.checked ? 0.1 : 1;
   camera.updateProjectionMatrix();
-  renderer.render(scene, camera);
-})
+  renderPipeline.render();
+});
+
+renderpassCheckbox?.addEventListener("input", () => {
+  if (renderpassCheckbox.checked) {
+    renderPipeline.outputNode = countPass;
+  } else {
+    renderPipeline.outputNode = scenePass.div(countPass.r);
+  }
+  renderPipeline.needsUpdate = true;
+  renderPipeline.render();
+});
+
+// Render loop
 
 function render() {
-  renderer.render(scene, camera);
+  renderPipeline.render();
 }
+
