@@ -5,6 +5,7 @@ import {
   instancedArray,
   instanceIndex,
   pass,
+  smoothstep,
   step,
   texture,
   uniform,
@@ -91,8 +92,9 @@ const texNode = texture(
 );
 
 rgbMaterial.colorNode = texNode.mul(
-  step(
+  smoothstep(
     float(100).sub(apertureUniform).div(200),
+    float(100).sub(apertureUniform).div(200).add(0.05),
     float(0.5).sub(distance(vec2(0.5), uv())),
   ),
 );

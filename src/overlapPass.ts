@@ -1,4 +1,4 @@
-import { color, distance, float, step, uniform, uv, vec2 } from "three/tsl";
+import { color, distance, float, smoothstep, step, uniform, uv, vec2 } from "three/tsl";
 import * as THREE from "three/webgpu";
 
 // Renders a separate pass of the scene with just (1.0,0.0,0.0) as the material color.
@@ -33,8 +33,9 @@ class OverlapPassNode extends THREE.PassNode {
     this.aperture = uniform(options.aperture);
 
     this.overlapMaterial.colorNode = color(1.0, 0.0, 0.0).mul(
-      step(
-        float(100).sub(this.aperture).div(200),
+      smoothstep(
+        (float(100).sub(this.aperture)).div(200),
+        (float(100).sub(this.aperture)).div(200).add(0.05),
         float(0.5).sub(distance(vec2(0.5), uv())),
       ),
     );
