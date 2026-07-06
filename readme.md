@@ -35,4 +35,3 @@ Like the image processing variables I mentioned earlier, there are some hardcode
 * Video exports
 * Addressing issues with color casts and hot pixels
 * More fun interactivity
-* Host on GitHub Pages
