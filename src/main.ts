@@ -18,6 +18,7 @@ import { overlapPass } from "./overlapPass";
 const { dots, flatDots } = buildDots();
 const dotsArray = instancedArray(flatDots, "vec2");
 
+const threeDiv: HTMLDivElement | null = document.body.querySelector("#three");
 const zoominCheckbox: HTMLInputElement | null =
   document.querySelector("#zoomin");
 const renderpassCheckbox: HTMLInputElement | null =
@@ -29,6 +30,10 @@ const xOffsetSlider: HTMLInputElement | null =
   document.querySelector("#xoffset");
 const yOffsetSlider: HTMLInputElement | null =
   document.querySelector("#yoffset");
+
+if (!threeDiv) {
+  throw new Error('The DOM is broken');
+}
 
 // Renderer setup
 
@@ -46,7 +51,7 @@ const renderer = new THREE.WebGPURenderer({ antialias: true });
 renderer.setSize(820, 820);
 renderer.setClearColor(0x000000, 1);
 renderer.setAnimationLoop(render);
-document.body.appendChild(renderer.domElement);
+threeDiv.appendChild(renderer.domElement);
 
 const geometry = new THREE.PlaneGeometry(0.01, 0.01);
 
