@@ -33,7 +33,7 @@ class OverlapPassNode extends THREE.PassNode {
     this.aperture = uniform(options.aperture);
 
     this.overlapMaterial.colorNode = color(1.0,0.0,0.0).mul(
-      step(this.aperture.div(200), float(0.5).sub(distance(vec2(0.5), uv()))),
+      step((float(100).sub(this.aperture)).div(200), float(0.5).sub(distance(vec2(0.5), uv()))),
     );
   }
 
