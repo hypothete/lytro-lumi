@@ -60,6 +60,7 @@ const rgbMaterial = new THREE.MeshBasicNodeMaterial({
 
 const textureLoader = new THREE.TextureLoader();
 const imgTex = textureLoader.load("public/test.png");
+imgTex.colorSpace = THREE.SRGBColorSpace;
 
 const focusUniform = uniform(Number(focusSlider?.value || 1));
 const apertureUniform = uniform(Number(apertureSlider?.value || 1));
