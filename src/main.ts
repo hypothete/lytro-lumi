@@ -29,16 +29,15 @@ const yOffsetSlider: HTMLInputElement | null =
   document.querySelector("#yoffset");
 
 if (!threeDiv) {
-  throw new Error('The DOM is broken');
+  throw new Error("The DOM is broken");
 }
 
 // consts and utils
 
-const PLANE_SIDE = 0.01;
+const PLANE_SIDE = 0.02;
 const RENDER_SIZE = 3280 / 8;
 
-const getZoomLevel = () =>  zoominCheckbox?.checked ? 0.05 : 1;
-
+const getZoomLevel = () => (zoominCheckbox?.checked ? 0.05 : 1);
 
 // Renderer setup
 
@@ -64,7 +63,7 @@ const geometry = new THREE.PlaneGeometry(PLANE_SIDE, PLANE_SIDE);
 const rgbMaterial = new THREE.MeshBasicNodeMaterial({
   blending: THREE.AdditiveBlending, // stack RGB values where microlenses overlap
   // we will divide by the overlapPass to normalize these values later
-  depthWrite: false
+  depthWrite: false,
 });
 
 const textureLoader = new THREE.TextureLoader();
@@ -88,11 +87,14 @@ const texNode = texture(
   dotsArray
     .element(instanceIndex)
     .add(offsetUniform.div(1000))
-    .sub(uv().sub(0.5).div(1000).mul(focusUniform)),
+    .sub(uv().sub(0.5).div(500).mul(focusUniform)),
 );
 
 rgbMaterial.colorNode = texNode.mul(
-  step((float(100).sub(apertureUniform)).div(200), float(0.5).sub(distance(vec2(0.5), uv()))),
+  step(
+    float(100).sub(apertureUniform).div(200),
+    float(0.5).sub(distance(vec2(0.5), uv())),
+  ),
 );
 
 // Mesh setup
@@ -112,8 +114,16 @@ scene.add(instances);
 
 const renderPipeline = new THREE.RenderPipeline(renderer);
 const scenePass = pass(scene, camera);
-const countPass = overlapPass(scene, camera, {aperture: Number(apertureSlider?.value || 0) });
-renderPipeline.outputNode = renderpassCheckbox?.checked ? countPass : scenePass.div(countPass.r);
+const countPass = overlapPass(scene, camera, {
+  aperture: Number(apertureSlider?.value || 0),
+});
+renderPipeline.outputNode = renderpassCheckbox?.checked
+  ? countPass
+  : scenePass.div(countPass.r);
+
+function render() {
+  renderPipeline.render();
+}
 
 // Event listeners
 
@@ -153,9 +163,68 @@ renderpassCheckbox?.addEventListener("input", () => {
   renderPipeline.needsUpdate = true;
 });
 
-// Render loop
+// drag and drop handling for images
 
-function render() {
-  renderPipeline.render();
-}
+renderer.domElement.addEventListener("dragover", (evt) => {
+  if (evt.dataTransfer === null) {
+    return false;
+  }
+  const imgFiles = [...evt.dataTransfer.items].filter((file) =>
+    file.type.startsWith("image/"),
+  );
+  if (imgFiles.length > 0) {
+    evt.preventDefault();
+    evt.dataTransfer.dropEffect = "copy";
+  } else {
+    evt.dataTransfer.dropEffect = "none";
+  }
+});
 
+renderer.domElement.addEventListener("drop", (evt) => {
+  if (evt.dataTransfer === null) {
+    return false;
+  }
+  const imgFiles = [...evt.dataTransfer.items].filter((file) =>
+    file.type.startsWith("image/"),
+  );
+  if (imgFiles.length > 0) {
+    evt.preventDefault();
+    evt.dataTransfer.dropEffect = "copy";
+    const imgToRead = (imgFiles.pop() as DataTransferItem).getAsFile();
+    if (imgToRead === null) {
+      return false;
+    }
+    const fileUrl = URL.createObjectURL(imgToRead);
+    const fileTex = textureLoader.load(fileUrl, () => {
+      texNode.value = fileTex;
+      texNode.needsUpdate = true;
+    });
+    fileTex.colorSpace = THREE.SRGBColorSpace;
+  } else {
+    evt.dataTransfer.dropEffect = "none";
+  }
+});
+
+window.addEventListener("dragover", (evt) => {
+  if (evt.dataTransfer === null) {
+    return false;
+  }
+  const imgFiles = [...evt.dataTransfer.items].filter((file) =>
+    file.type.startsWith("image/"),
+  );
+  if (imgFiles.length > 0) {
+    evt.preventDefault();
+  }
+});
+
+window.addEventListener("drop", (evt) => {
+  if (evt.dataTransfer === null) {
+    return false;
+  }
+  const imgFiles = [...evt.dataTransfer.items].filter((file) =>
+    file.type.startsWith("image/"),
+  );
+  if (imgFiles.length > 0) {
+    evt.preventDefault();
+  }
+});
