@@ -7,10 +7,15 @@
 count=0
 while read -r line; do
   echo $line
-  lfpsplitter $line
   filedir=$(dirname $line)
-  raw2tiff -w 3280 -l 3280 -d short "${filedir}/raw_imageRef0.raw" "${filedir}/output.tif"
-  python3 scripts/demosaic.py "${filedir}/output.tif"
+  tiffpath="${filedir}/output.tif"
+  if [ ! -f $tiffpath ]; then
+    lfpsplitter $line
+    raw2tiff -w 3280 -l 3280 -d short "${filedir}/raw_imageRef0.raw" "${filedir}/output.tif"
+  else
+    echo "skipping raw"
+  fi
+  python3 scripts/demosaic.py $tiffpath
   printf -v paddedcount "%05d" count
   echo $paddedcount
   cp -v "${filedir}/output.jpg" "samples/bulk/${count}.jpg"

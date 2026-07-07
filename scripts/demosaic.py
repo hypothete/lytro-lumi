@@ -42,6 +42,6 @@ rgb_normalized = np.clip(rgb_corrected / threshold, 0, 1)
 gamma_value = 0.41666001081466675
 rgb_gamma = np.power(np.clip(rgb_normalized, 0, 1), gamma_value)
 
-final = cv2.medianBlur(rgb_gamma, 3)
+final = cv2.medianBlur(rgb_gamma, 5)
 
-cv2.imwrite(outputPath, np.clip(rgb_gamma * 255, 0, 255).astype(np.uint8))
+cv2.imwrite(outputPath, np.clip(final * 255, 0, 255).astype(np.uint8))
