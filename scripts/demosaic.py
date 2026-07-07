@@ -28,18 +28,19 @@ imageRaw = imageRaw - black_level
 
 rgb = cv2.cvtColor(imageRaw.astype(np.uint16), cv2.COLOR_BayerRGGB2RGB).astype(np.float32)
 
-rgb = rgb * awb
+rgb_balanced = rgb * awb
 
-flat = rgb.reshape(-1, 3)
+flat = rgb_balanced.reshape(-1, 3)
 rgb_corrected = flat @ colorCorrection.T
 rgb_corrected = rgb_corrected.reshape(3280, 3280, 3)
 rgb_corrected = np.clip(rgb_corrected, 0, None)
 
-rgb_normalized = rgb_corrected / rgb.max()
+threshold = np.percentile(rgb_corrected, 90)
+rgb_normalized = np.clip(rgb_corrected / threshold, 0, 1)
 
 gamma_value = 0.41666001081466675
 rgb_gamma = np.power(np.clip(rgb_normalized, 0, 1), gamma_value)
 
-final = cv2.medianBlur(rgb_gamma, 5)
+final = cv2.medianBlur(rgb_gamma, 3)
 
 cv2.imwrite(outputPath, np.clip(rgb_gamma * 255, 0, 255).astype(np.uint8))
