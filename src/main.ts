@@ -6,7 +6,6 @@ import {
   instanceIndex,
   pass,
   smoothstep,
-  step,
   texture,
   uniform,
   uv,
@@ -19,15 +18,10 @@ import { overlapPass } from "./overlapPass";
 const threeDiv: HTMLDivElement | null = document.body.querySelector("#three");
 const zoominCheckbox: HTMLInputElement | null =
   document.querySelector("#zoomin");
-const renderpassCheckbox: HTMLInputElement | null =
-  document.querySelector("#renderpass");
 const apertureSlider: HTMLInputElement | null =
   document.querySelector("#aperture");
 const focusSlider: HTMLInputElement | null = document.querySelector("#focus");
-const xOffsetSlider: HTMLInputElement | null =
-  document.querySelector("#xoffset");
-const yOffsetSlider: HTMLInputElement | null =
-  document.querySelector("#yoffset");
+let mouseClicked = false;
 
 if (!threeDiv) {
   throw new Error("The DOM is broken");
@@ -36,7 +30,8 @@ if (!threeDiv) {
 // consts and utils
 
 const PLANE_SIDE = 0.02;
-const RENDER_SIZE = 3280 / 8;
+const RENDER_SIZE = 3280 / 4;
+const HALF_RENDER_SIZE = RENDER_SIZE / 2;
 
 const getZoomLevel = () => (zoominCheckbox?.checked ? 0.05 : 1);
 
@@ -74,10 +69,7 @@ imgTex.colorSpace = THREE.SRGBColorSpace;
 const focusUniform = uniform(Number(focusSlider?.value || 1));
 const apertureUniform = uniform(Number(apertureSlider?.value || 1));
 const offsetUniform = uniform(
-  new THREE.Vector2(
-    Number(xOffsetSlider?.value || 0),
-    Number(yOffsetSlider?.value || 0),
-  ),
+  new THREE.Vector2(0),
 );
 
 const { dots, flatDots } = buildDots();
@@ -119,9 +111,8 @@ const scenePass = pass(scene, camera);
 const countPass = overlapPass(scene, camera, {
   aperture: Number(apertureSlider?.value || 0),
 });
-renderPipeline.outputNode = renderpassCheckbox?.checked
-  ? countPass
-  : scenePass.div(countPass.r);
+
+renderPipeline.outputNode = scenePass.div(countPass.r);
 
 function render() {
   renderPipeline.render();
@@ -131,23 +122,11 @@ function render() {
 
 apertureSlider?.addEventListener("input", () => {
   apertureUniform.value = Number(apertureSlider?.value || 0);
-  apertureUniform.needsUpdate = true;
   countPass.updateAperture(Number(apertureSlider?.value || 0));
 });
 
 focusSlider?.addEventListener("input", () => {
   focusUniform.value = Number(focusSlider?.value || 0);
-  focusUniform.needsUpdate = true;
-});
-
-xOffsetSlider?.addEventListener("input", () => {
-  offsetUniform.value.x = Number(xOffsetSlider?.value || 0);
-  focusUniform.needsUpdate = true;
-});
-
-yOffsetSlider?.addEventListener("input", () => {
-  offsetUniform.value.y = Number(yOffsetSlider?.value || 0);
-  focusUniform.needsUpdate = true;
 });
 
 zoominCheckbox?.addEventListener("input", () => {
@@ -156,13 +135,36 @@ zoominCheckbox?.addEventListener("input", () => {
   camera.updateProjectionMatrix();
 });
 
-renderpassCheckbox?.addEventListener("input", () => {
-  if (renderpassCheckbox.checked) {
-    renderPipeline.outputNode = countPass;
-  } else {
-    renderPipeline.outputNode = scenePass.div(countPass.r);
+renderer.domElement.addEventListener("mousemove", (evt) => {
+  if (!mouseClicked) {
+    return;
   }
-  renderPipeline.needsUpdate = true;
+  const rect = renderer.domElement.getBoundingClientRect();
+  const mouseX = evt.clientX - rect.left;
+  const mouseY = evt.clientY - rect.top;
+  offsetUniform.value.set(
+    (mouseX - HALF_RENDER_SIZE) / RENDER_SIZE,
+    (HALF_RENDER_SIZE - mouseY) / RENDER_SIZE,
+  );
+});
+
+renderer.domElement.addEventListener("mousedown", () => {
+  mouseClicked = true;
+});
+
+window.addEventListener("mouseup", () => {
+  mouseClicked = false;
+});
+
+renderer.domElement.addEventListener("touchmove", (evt) => {
+  evt.preventDefault()
+  const rect = renderer.domElement.getBoundingClientRect();
+  const mouseX = evt.changedTouches[0].clientX - rect.left;
+  const mouseY = evt.changedTouches[0].clientY - rect.top;
+  offsetUniform.value.set(
+    (mouseX - HALF_RENDER_SIZE) / RENDER_SIZE,
+    (HALF_RENDER_SIZE - mouseY) / RENDER_SIZE,
+  );
 });
 
 // drag and drop handling for images
