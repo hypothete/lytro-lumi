@@ -1,4 +1,4 @@
-import { color, distance, float, smoothstep, step, uniform, uv, vec2 } from "three/tsl";
+import { color, distance, float, smoothstep, uniform, uv, vec2 } from "three/tsl";
 import * as THREE from "three/webgpu";
 
 // Renders a separate pass of the scene with just (1.0,0.0,0.0) as the material color.
