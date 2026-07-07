@@ -23,8 +23,9 @@ awb = np.array([
 
 imageRaw = cv2.imread(inputPath, cv2.IMREAD_UNCHANGED)
 
-black_level = 168 * 12
-imageRaw = imageRaw - black_level
+blackPercentile = np.percentile(imageRaw, 5)
+imageRaw = imageRaw.astype(np.float32) - blackPercentile
+imageRaw = np.maximum(imageRaw, 0)
 
 rgb = cv2.cvtColor(imageRaw.astype(np.uint16), cv2.COLOR_BayerRGGB2RGB).astype(np.float32)
 
