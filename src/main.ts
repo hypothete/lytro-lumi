@@ -55,6 +55,10 @@ threeDiv.appendChild(renderer.domElement);
 
 // Lumigraph geo and material
 
+let swirlAnimation = true;
+let swirlAngle = 0;
+let swirlTimer: number;
+
 const geometry = new THREE.PlaneGeometry(PLANE_SIDE, PLANE_SIDE);
 const rgbMaterial = new THREE.MeshBasicNodeMaterial({
   blending: THREE.AdditiveBlending, // stack RGB values where microlenses overlap
@@ -115,6 +119,13 @@ const countPass = overlapPass(scene, camera, {
 renderPipeline.outputNode = scenePass.div(countPass.r);
 
 function render() {
+  if (swirlAnimation) {
+    swirlAngle += 0.02;
+    if (swirlAngle > Math.PI * 2) {
+      swirlAngle = 0;
+    }
+    offsetUniform.value.set(Math.cos(swirlAngle) / 2, Math.sin(swirlAngle) / 2);
+  }
   renderPipeline.render();
 }
 
@@ -150,10 +161,24 @@ renderer.domElement.addEventListener("mousemove", (evt) => {
 
 renderer.domElement.addEventListener("mousedown", () => {
   mouseClicked = true;
+  swirlAnimation = false;
+  if (swirlTimer) {
+    clearTimeout(swirlTimer);
+  }
 });
 
 window.addEventListener("mouseup", () => {
   mouseClicked = false;
+  swirlTimer = setTimeout(() => {
+    swirlAnimation = true;
+  }, 5000);
+});
+
+
+renderer.domElement.addEventListener("touchstart", () => {
+  if (swirlTimer) {
+    clearTimeout(swirlTimer);
+  }
 });
 
 renderer.domElement.addEventListener("touchmove", (evt) => {
@@ -165,6 +190,12 @@ renderer.domElement.addEventListener("touchmove", (evt) => {
     (mouseX - HALF_RENDER_SIZE) / RENDER_SIZE,
     (HALF_RENDER_SIZE - mouseY) / RENDER_SIZE,
   );
+});
+
+renderer.domElement.addEventListener("touchend", () => {
+  swirlTimer = setTimeout(() => {
+    swirlAnimation = true;
+  }, 5000);
 });
 
 // drag and drop handling for images

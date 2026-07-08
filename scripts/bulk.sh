@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # takes a source list of files like from
-# "find samples -type f -name raw.lfp > found.txt"
+# "find samples -type f -name raw.lfp > samples/found.txt"
 # and outputs them in samples/bulk
 
 count=0
