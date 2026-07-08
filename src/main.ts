@@ -30,7 +30,7 @@ if (!threeDiv) {
 // consts and utils
 
 const PLANE_SIDE = 0.02;
-const RENDER_SIZE = 3280 / 4;
+const RENDER_SIZE = 3280 / 6;
 const HALF_RENDER_SIZE = RENDER_SIZE / 2;
 
 const getZoomLevel = () => (zoominCheckbox?.checked ? 0.05 : 1);
@@ -124,7 +124,7 @@ function render() {
     if (swirlAngle > Math.PI * 2) {
       swirlAngle = 0;
     }
-    offsetUniform.value.set(Math.cos(swirlAngle) / 2, Math.sin(swirlAngle) / 2);
+    offsetUniform.value.set(-Math.cos(swirlAngle) / 2, Math.sin(swirlAngle) / 2);
   }
   renderPipeline.render();
 }
