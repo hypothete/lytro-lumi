@@ -124,7 +124,7 @@ function render() {
     if (swirlAngle > Math.PI * 2) {
       swirlAngle = 0;
     }
-    offsetUniform.value.set(-Math.cos(swirlAngle) / 2, Math.sin(swirlAngle) / 2);
+    offsetUniform.value.set(1-Math.cos(swirlAngle) / 2, Math.sin(swirlAngle) / 2);
   }
   renderPipeline.render();
 }
