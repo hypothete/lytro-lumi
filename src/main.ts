@@ -21,19 +21,30 @@ const zoominCheckbox: HTMLInputElement | null =
 const apertureSlider: HTMLInputElement | null =
   document.querySelector("#aperture");
 const focusSlider: HTMLInputElement | null = document.querySelector("#focus");
-let mouseClicked = false;
+const recordBtn: HTMLButtonElement | null = document.querySelector("#record");
+const downloadLink: HTMLAnchorElement | null = document.querySelector("#download");
+
 
 if (!threeDiv) {
   throw new Error("The DOM is broken");
 }
 
-// consts and utils
+// shared vars and utils
 
 const PLANE_SIDE = 0.02;
 const RENDER_SIZE = 3280 / 6;
 const HALF_RENDER_SIZE = RENDER_SIZE / 2;
+const VIDEO_LENGTH = Math.PI * 2 * 30 * 10;
 
 const getZoomLevel = () => (zoominCheckbox?.checked ? 0.05 : 1);
+
+const clearDownload = () => {
+  if (!downloadLink) {
+    return;
+  }
+  downloadLink.setAttribute('href', '');
+  downloadLink.textContent = '';
+}
 
 // Renderer setup
 
@@ -47,17 +58,26 @@ const camera = new THREE.OrthographicCamera(
   -1,
 );
 
+let mouseClicked = false;
+
+let swirlAnimation = true;
+let swirlAngle = 0;
+let swirlTimer: number;
+
+let recorder: MediaRecorder;
+let recording = false;
+let recordingAngle = 0;
+let recordStart = 0;
+
 const renderer = new THREE.WebGPURenderer({ antialias: true });
 renderer.setSize(RENDER_SIZE, RENDER_SIZE);
 renderer.setClearColor(0x000000, 1);
 renderer.setAnimationLoop(render);
 threeDiv.appendChild(renderer.domElement);
+const captureStream = renderer.domElement.captureStream();
+
 
 // Lumigraph geo and material
-
-let swirlAnimation = true;
-let swirlAngle = 0;
-let swirlTimer: number;
 
 const geometry = new THREE.PlaneGeometry(PLANE_SIDE, PLANE_SIDE);
 const rgbMaterial = new THREE.MeshBasicNodeMaterial({
@@ -118,15 +138,69 @@ const countPass = overlapPass(scene, camera, {
 
 renderPipeline.outputNode = scenePass.div(countPass.r);
 
-function render() {
+function render(timestamp: number) {
   if (swirlAnimation) {
     swirlAngle += 0.02;
     if (swirlAngle > Math.PI * 2) {
       swirlAngle = 0;
     }
     offsetUniform.value.set(Math.sin(swirlAngle) / 2, Math.cos(swirlAngle) / 2);
+  } else if (recording) {
+    if (recordStart === 0) {
+      recordStart = timestamp;
+      recorder.start();
+    }
+    const duration = timestamp - recordStart;
+    recordingAngle = duration / (30 * 10);
+    offsetUniform.value.set(Math.sin(recordingAngle) / 2, Math.cos(recordingAngle) / 2);
+    if (duration >= VIDEO_LENGTH) {
+      recording = false;
+      recorder.stop();
+      console.log('stopping');
+      return;
+    }
   }
   renderPipeline.render();
+}
+
+// Recorder
+
+function record() {
+  if (!recordBtn || !downloadLink) {
+    throw new Error('Missing DOM for recording')
+  }
+
+  if (recording) {
+    return false;
+  }
+
+  recording = true;
+  recordStart = 0;
+  recordingAngle = 0;
+  swirlAnimation = false;
+  clearTimeout(swirlTimer);
+  clearDownload();
+  recordBtn.setAttribute('disabled', 'true');
+  recordBtn.textContent = 'Generating WebM video...';
+
+  const chunks: Blob[] = [];
+  recorder = new MediaRecorder(captureStream, {
+    mimeType: 'video/webm; codecs="vp8"',
+    bitsPerSecond: 1600*1024*1024,
+  });
+
+  recorder.onstop = () => {
+    const blob = new Blob(chunks, { 'type' : 'video/webm; codecs="vp8"' });
+    downloadLink.setAttribute('href', URL.createObjectURL(blob));
+    downloadLink.textContent = 'DOWNLOAD';
+    recordBtn.removeAttribute('disabled');
+    recordBtn.textContent = 'Record video';
+    swirlAnimation = true;
+  };
+
+  recorder.ondataavailable = (e) => {
+    chunks.push(e.data);
+  };
 }
 
 // Event listeners
@@ -170,7 +244,9 @@ renderer.domElement.addEventListener("mousedown", () => {
 window.addEventListener("mouseup", () => {
   mouseClicked = false;
   swirlTimer = setTimeout(() => {
-    swirlAnimation = true;
+    if (!recording) {
+      swirlAnimation = true;
+    }
   }, 5000);
 });
 
@@ -194,9 +270,13 @@ renderer.domElement.addEventListener("touchmove", (evt) => {
 
 renderer.domElement.addEventListener("touchend", () => {
   swirlTimer = setTimeout(() => {
-    swirlAnimation = true;
+    if (!recording) {
+      swirlAnimation = true;
+    }
   }, 5000);
 });
+
+recordBtn?.addEventListener('click', record)
 
 // drag and drop handling for images
 
@@ -224,6 +304,7 @@ renderer.domElement.addEventListener("drop", (evt) => {
   );
   if (imgFiles.length > 0) {
     evt.preventDefault();
+    clearDownload();
     evt.dataTransfer.dropEffect = "copy";
     const imgToRead = (imgFiles.pop() as DataTransferItem).getAsFile();
     if (imgToRead === null) {

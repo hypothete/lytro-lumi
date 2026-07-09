@@ -54,3 +54,7 @@ input[type=range] {
   width: inherit;
   max-width: 50rem;
 }
+
+#download {
+  margin-left: 1rem;
+}

@@ -36,7 +36,7 @@ rgb_corrected = flat @ colorCorrection.T
 rgb_corrected = rgb_corrected.reshape(3280, 3280, 3)
 rgb_corrected = np.clip(rgb_corrected, 0, None)
 
-threshold = np.percentile(rgb_corrected, 90)
+threshold = np.percentile(rgb_corrected, 97)
 rgb_normalized = np.clip(rgb_corrected / threshold, 0, 1)
 
 gamma_value = 0.41666001081466675
