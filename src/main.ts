@@ -11,6 +11,7 @@ import {
   uv,
   vec2,
 } from "three/tsl";
+import { fixWebmDuration } from "@fix-webm-duration/fix";
 import "./style.css";
 import { buildDots } from "./dots";
 import { overlapPass } from "./overlapPass";
@@ -68,6 +69,7 @@ let recorder: MediaRecorder;
 let recording = false;
 let recordingAngle = 0;
 let recordStart = 0;
+let recordDuration = 0;
 
 const renderer = new THREE.WebGPURenderer({ antialias: true });
 renderer.setSize(RENDER_SIZE, RENDER_SIZE);
@@ -150,10 +152,10 @@ function render(timestamp: number) {
       recordStart = timestamp;
       recorder.start();
     }
-    const duration = timestamp - recordStart;
-    recordingAngle = duration / (30 * 10);
+    recordDuration = timestamp - recordStart;
+    recordingAngle = recordDuration / (30 * 10);
     offsetUniform.value.set(Math.sin(recordingAngle) / 2, Math.cos(recordingAngle) / 2);
-    if (duration >= VIDEO_LENGTH) {
+    if (recordDuration >= VIDEO_LENGTH) {
       recording = false;
       recorder.stop();
       console.log('stopping');
@@ -190,12 +192,14 @@ function record() {
   });
 
   recorder.onstop = () => {
-    const blob = new Blob(chunks, { 'type' : 'video/webm; codecs="vp8"' });
-    downloadLink.setAttribute('href', URL.createObjectURL(blob));
-    downloadLink.textContent = 'DOWNLOAD';
-    recordBtn.removeAttribute('disabled');
-    recordBtn.textContent = 'Record video';
-    swirlAnimation = true;
+    const buggyBlob = new Blob(chunks, { 'type' : 'video/webm; codecs="vp8"' });
+    fixWebmDuration(buggyBlob, recordDuration).then((finalBlob) => {
+      downloadLink.setAttribute('href', URL.createObjectURL(finalBlob));
+      downloadLink.textContent = 'DOWNLOAD';
+      recordBtn.removeAttribute('disabled');
+      recordBtn.textContent = 'Record video';
+      swirlAnimation = true;
+    })
   };
 
   recorder.ondataavailable = (e) => {
