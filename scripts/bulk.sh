@@ -18,6 +18,6 @@ while read -r line; do
   python3 scripts/demosaic.py $tiffpath
   printf -v paddedcount "%05d" count
   echo $paddedcount
-  cp -v "${filedir}/output.jpg" "samples/bulk/${count}.jpg"
+  cp -v "${filedir}/color.tif" "samples/bulk-jul13/${count}.tif"
   ((count++))
 done < $1

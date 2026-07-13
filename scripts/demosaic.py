@@ -4,7 +4,7 @@ import numpy as np
 import json
 
 inputPath = sys.argv[1]
-outputPath = inputPath.replace('tif','jpg')
+outputPath = inputPath.replace('output','color')
 
 jsonPath = inputPath.replace('output.tif', 'raw_metadataRef0.json')
 print(jsonPath)
@@ -23,9 +23,9 @@ awb = np.array([
 
 imageRaw = cv2.imread(inputPath, cv2.IMREAD_UNCHANGED)
 
-blackPercentile = np.percentile(imageRaw, 5)
-imageRaw = imageRaw.astype(np.float32) - blackPercentile
-imageRaw = np.maximum(imageRaw, 0)
+# blackPercentile = np.percentile(imageRaw, 5)
+# imageRaw = imageRaw.astype(np.float32) - blackPercentile
+# imageRaw = np.maximum(imageRaw, 0)
 
 rgb = cv2.cvtColor(imageRaw.astype(np.uint16), cv2.COLOR_BayerRGGB2RGB).astype(np.float32)
 
@@ -36,12 +36,12 @@ rgb_corrected = flat @ colorCorrection.T
 rgb_corrected = rgb_corrected.reshape(3280, 3280, 3)
 rgb_corrected = np.clip(rgb_corrected, 0, None)
 
-threshold = np.percentile(rgb_corrected, 97)
-rgb_normalized = np.clip(rgb_corrected / threshold, 0, 1)
+# threshold = np.percentile(rgb_corrected, 97)
+# rgb_normalized = np.clip(rgb_corrected / threshold, 0, 1)
 
-gamma_value = 0.41666001081466675
-rgb_gamma = np.power(np.clip(rgb_normalized, 0, 1), gamma_value)
+# gamma_value = 0.41666001081466675
+# rgb_gamma = np.power(np.clip(rgb_normalized, 0, 1), gamma_value)
 
-final = cv2.medianBlur(rgb_gamma, 5)
+# final = cv2.medianBlur(rgb_gamma, 5)
 
-cv2.imwrite(outputPath, np.clip(final * 255, 0, 255).astype(np.uint8))
+cv2.imwrite(outputPath, rgb_corrected.astype(np.uint16))
