@@ -13,6 +13,7 @@ import {
 } from "three/tsl";
 import { fixWebmDuration } from "@fix-webm-duration/fix";
 import "./style.css";
+import "./range.css";
 import { buildDots } from "./dots";
 import { overlapPass } from "./overlapPass";
 
@@ -33,7 +34,7 @@ if (!threeDiv) {
 // shared vars and utils
 
 const PLANE_SIDE = 0.02;
-const RENDER_SIZE = 3280 / 6;
+const RENDER_SIZE = 3280 / 3;
 const HALF_RENDER_SIZE = RENDER_SIZE / 2;
 const VIDEO_LENGTH = Math.PI * 2 * 30 * 10;
 
@@ -147,15 +148,14 @@ function render(timestamp: number) {
       swirlAngle = Math.PI * 2;
     }
     offsetUniform.value.set(Math.cos(swirlAngle) / 2, Math.sin(swirlAngle) / 2);
-    console.log(Math.cos(swirlAngle) / 2 + Math.sin(swirlAngle) / 2);
   } else if (recording) {
     if (recordStart === 0) {
       recordStart = timestamp;
       recorder.start();
     }
     recordDuration = timestamp - recordStart;
-    recordingAngle = recordDuration / (30 * 10);
-    offsetUniform.value.set(Math.sin(recordingAngle) / 2, Math.cos(recordingAngle) / 2);
+    recordingAngle = Math.PI * 2 - recordDuration / (30 * 10);
+    offsetUniform.value.set(Math.cos(recordingAngle) / 2, Math.sin(recordingAngle) / 2);
     if (recordDuration >= VIDEO_LENGTH) {
       recording = false;
       recorder.stop();
@@ -257,6 +257,7 @@ window.addEventListener("mouseup", () => {
 
 
 renderer.domElement.addEventListener("touchstart", () => {
+  swirlAnimation = false;
   if (swirlTimer) {
     clearTimeout(swirlTimer);
   }

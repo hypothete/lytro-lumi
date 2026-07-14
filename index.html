@@ -13,10 +13,10 @@
     <main>
       <div id="three"></div>
         <div id="controls">
-          <label><input type="checkbox" id="zoomin">Zoom in?</label>
-          <label><input type="range" id="aperture" min="0" max="100" step="0.1"/>Aperture</label>
-          <label><input type="range" id="focus" min="0" max="7" value="2" step="0.01"/>Focal Distance</label>
+          <label><input type="range" id="aperture" min="0" max="100" step="0.1"/><span>Aperture</span></label>
+          <label><input type="range" id="focus" min="0" max="7" value="2" step="0.01"/><span>Focal Distance</span></label>
           <div>
+            <label><input type="checkbox" id="zoomin"><span>Zoom in?</span></label>
             <button id="record">Record video</button>
             <a href="" id="download" download="lumi.webm"></a>
             <!-- <a href="" id="download" target="_blank"></a> -->
@@ -24,7 +24,7 @@
           <p>
             Click or touch and drag to shift the perspective of the image. Different focal distances can cause the parallax to be stronger or weaker.
           </p>
-          <a href="https://github.com/hypothete/lytro-lumi">View on GitHub</a>
+          <a href="https://github.com/hypothete/lytro-lumi">Learn more on GitHub</a>
         </div>
     </main>
     <script type="module" src="/src/main.ts"></script>

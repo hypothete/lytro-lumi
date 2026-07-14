@@ -4,14 +4,18 @@ body {
   flex-direction: column;
   align-items: center;
   margin: 0;
+  font-size: 32px;
+  color: #ccc;
+  font-family: "Courier New", Courier, monospace;
 }
 
 a {
   color: #ccc;
+  font-weight: bold;
 }
 
 a:visited {
-  color: #aaa;
+  color: #999;
 }
 
 main {
@@ -27,34 +31,63 @@ main {
 }
 
 #controls {
-  background-color: #333;
-  color: #ccc;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 18px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   margin: 2rem 2rem;
-  max-width: 60rem;
+  max-width: 55rem;
+  padding-top: 1.5rem;
 }
 
 #controls > * {
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100%;
 }
 
-input {
-  margin-right: 0.5rem;
+label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
-input[type=range] {
+input {
+  margin-right: 1rem;
+}
+
+input[type="checkbox"] {
+  width: 3rem;
+  height: 3rem;
+}
+
+input[type="range"] {
   width: inherit;
   max-width: 50rem;
 }
 
+#record {
+  font-size: 18px;
+  padding: 1rem;
+  margin-left: 3rem;
+}
+
 #download {
   margin-left: 1rem;
+}
+
+@media screen and (orientation: landscape) {
+  body {
+    font-size: 18px;
+  }
+
+  #three > canvas {
+    max-width: 546px;
+    max-height: 546px;
+  }
+
+  #controls > * {
+    margin-bottom: 2rem;
+  }
 }
