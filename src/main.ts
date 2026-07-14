@@ -106,7 +106,7 @@ const texNode = texture(
   dotsArray
     .element(instanceIndex)
     .add(offsetUniform.div(1000))
-    .sub(uv().sub(0.5).div(500).mul(focusUniform)),
+    .sub(vec2(0.5).sub(uv()).div(500).mul(focusUniform)),
 );
 
 rgbMaterial.colorNode = texNode.mul(
