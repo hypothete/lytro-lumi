@@ -44,4 +44,4 @@ rgb_corrected = np.clip(rgb_corrected, 0, None)
 
 # final = cv2.medianBlur(rgb_gamma, 5)
 
-cv2.imwrite(outputPath, rgb_corrected.astype(np.uint16))
+cv2.imwrite(outputPath, np.clip(rgb_corrected, 0, 65535).astype(np.uint16))

@@ -142,11 +142,12 @@ renderPipeline.outputNode = scenePass.div(countPass.r);
 
 function render(timestamp: number) {
   if (swirlAnimation) {
-    swirlAngle += 0.02;
-    if (swirlAngle > Math.PI * 2) {
-      swirlAngle = 0;
+    swirlAngle -= 0.02;
+    if (swirlAngle < 0) {
+      swirlAngle = Math.PI * 2;
     }
-    offsetUniform.value.set(Math.sin(swirlAngle) / 2, Math.cos(swirlAngle) / 2);
+    offsetUniform.value.set(Math.cos(swirlAngle) / 2, Math.sin(swirlAngle) / 2);
+    console.log(Math.cos(swirlAngle) / 2 + Math.sin(swirlAngle) / 2);
   } else if (recording) {
     if (recordStart === 0) {
       recordStart = timestamp;
