@@ -93,7 +93,7 @@ const textureLoader = new THREE.TextureLoader();
 const imgTex = textureLoader.load("./test.jpg");
 imgTex.colorSpace = THREE.SRGBColorSpace;
 
-const focusUniform = uniform(Number(focusSlider?.value || 1));
+const focusUniform = uniform(Number(focusSlider?.value || 0));
 const apertureUniform = uniform(Number(apertureSlider?.value || 1));
 const offsetUniform = uniform(
   new THREE.Vector2(0),
@@ -107,7 +107,7 @@ const texNode = texture(
   dotsArray
     .element(instanceIndex)
     .add(offsetUniform.div(1000))
-    .sub(vec2(0.5).sub(uv()).div(500).mul(focusUniform)),
+    .sub(vec2(0.5).sub(uv()).div(500).mul(focusUniform).mul(-1)),
 );
 
 rgbMaterial.colorNode = texNode.mul(
