@@ -16,6 +16,7 @@ import "./style.css";
 import "./range.css";
 import { buildDots } from "./dots";
 import { overlapPass } from "./overlapPass";
+import { getGalleryDOM } from "./gallery";
 
 const threeDiv: HTMLDivElement | null = document.body.querySelector("#three");
 const zoominCheckbox: HTMLInputElement | null =
@@ -25,7 +26,8 @@ const apertureSlider: HTMLInputElement | null =
 const focusSlider: HTMLInputElement | null = document.querySelector("#focus");
 const recordBtn: HTMLButtonElement | null = document.querySelector("#record");
 const downloadLink: HTMLAnchorElement | null = document.querySelector("#download");
-
+const galleryContainer: HTMLDivElement | null = document.body.querySelector("#gallery-container");
+const galleryLabel: HTMLParagraphElement | null = document.body.querySelector("#gallery-label");
 
 if (!threeDiv) {
   throw new Error("The DOM is broken");
@@ -79,7 +81,6 @@ renderer.setAnimationLoop(render);
 threeDiv.appendChild(renderer.domElement);
 const captureStream = renderer.domElement.captureStream();
 
-
 // Lumigraph geo and material
 
 const geometry = new THREE.PlaneGeometry(PLANE_SIDE, PLANE_SIDE);
@@ -117,6 +118,10 @@ rgbMaterial.colorNode = texNode.mul(
     float(0.5).sub(distance(vec2(0.5), uv())),
   ),
 );
+
+// gallery setup (needs texNode)
+
+prepareGallery();
 
 // Mesh setup
 
@@ -282,7 +287,24 @@ renderer.domElement.addEventListener("touchend", () => {
   }, 5000);
 });
 
-recordBtn?.addEventListener('click', record)
+recordBtn?.addEventListener('click', record);
+
+function prepareGallery() {
+  if (!galleryContainer || !galleryLabel) {
+    console.error("Gallery is missing!");
+    return;
+  }
+
+  const selectGalleryItem = (url: string) => {
+    const fileTex = textureLoader.load(url, () => {
+      texNode.value = fileTex;
+      texNode.needsUpdate = true;
+    });
+    fileTex.colorSpace = THREE.SRGBColorSpace;
+  };
+
+  getGalleryDOM(galleryContainer, galleryLabel, selectGalleryItem);
+}
 
 // drag and drop handling for images
 

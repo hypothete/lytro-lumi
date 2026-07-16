@@ -4,4 +4,4 @@
 
 mkdir "${1}/thumbs"
 
-magick mogrify  -format jpg -path "${1}/thumbs" -thumbnail 100x100 "${1}/*.jpg"
+magick mogrify  -format avif -path "${1}/thumbs" -thumbnail 100x100 "${1}/*.avif"
