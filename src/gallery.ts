@@ -10,6 +10,7 @@ const items: GalleryItem[] = galleryData;
 export function getGalleryDOM (container: HTMLDivElement, label: HTMLParagraphElement, selectItem: (url: string) => void) { 
   items.forEach(item => {
     const thumb = document.createElement('img');
+    thumb.classList.add('gallery-item');
     thumb.src = item.location.replace("./gallery", "./gallery/thumbs");
     thumb.addEventListener("click", () => {
       label.textContent = item.name;

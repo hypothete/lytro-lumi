@@ -17,19 +17,19 @@ input[type="range"]:focus {
 /* slider track */
 input[type="range"]::-webkit-slider-runnable-track {
   background-color: #eee;
-  border-radius: 1rem;
-  height: 1rem;
+  border-radius: 3rem;
+  height: 3rem;
 }
 
 /* slider thumb */
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; /* Override default look */
   appearance: none;
-  margin-top: -16px; /* Centers thumb on the track */
+  margin-top: -24px; /* Centers thumb on the track */
   background-color: #808080;
   border-radius: 50%;
-  height: 3rem;
-  width: 3rem;
+  height: 6rem;
+  width: 6rem;
 }
 
 @media screen and (orientation: landscape) {
@@ -49,8 +49,8 @@ input[type="range"]::-webkit-slider-thumb {
 /* slider track */
 input[type="range"]::-moz-range-track {
   background-color: #eee;
-  border-radius: 1rem;
-  height: 1rem;
+  border-radius: 3rem;
+  height: 3rem;
 }
 
 /* slider thumb */
@@ -58,8 +58,8 @@ input[type="range"]::-moz-range-thumb {
   background-color: #808080;
   border: none; /*Removes extra border that FF applies*/
   border-radius: 50%;
-  height: 3rem;
-  width: 3rem;
+  height: 6rem;
+  width: 6rem;
 }
 
 @media screen and (orientation: landscape) {

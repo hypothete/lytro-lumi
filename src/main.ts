@@ -24,6 +24,10 @@ const zoominCheckbox: HTMLInputElement | null =
 const apertureSlider: HTMLInputElement | null =
   document.querySelector("#aperture");
 const focusSlider: HTMLInputElement | null = document.querySelector("#focus");
+const focusPlus: HTMLButtonElement | null = document.querySelector("#focus-plus");
+const focusMinus: HTMLButtonElement | null = document.querySelector("#focus-minus");
+const aperturePlus: HTMLButtonElement | null = document.querySelector("#aperture-plus");
+const apertureMinus: HTMLButtonElement | null = document.querySelector("#aperture-minus");
 const recordBtn: HTMLButtonElement | null = document.querySelector("#record");
 const downloadLink: HTMLAnchorElement | null =
   document.querySelector("#download");
@@ -90,7 +94,7 @@ const rgbMaterial = new THREE.MeshBasicNodeMaterial({
 });
 
 const textureLoader = new THREE.TextureLoader();
-const imgTex = textureLoader.load("./test.jpg");
+const imgTex = textureLoader.load("./test.avif");
 imgTex.colorSpace = THREE.SRGBColorSpace;
 
 const focusUniform = uniform(Number(focusSlider?.value || 0));
@@ -211,8 +215,59 @@ apertureSlider?.addEventListener("input", () => {
   countPass.updateAperture(Number(apertureSlider?.value || 0));
 });
 
+aperturePlus?.addEventListener('click', evt => {
+  evt.preventDefault();
+  if (!apertureSlider) {
+    return false;
+  }
+  apertureSlider.value = Math.min(
+    Number(apertureSlider.value) + Number(apertureSlider.step) * 5,
+    Number(apertureSlider.max)
+  ).toString();
+  apertureUniform.value = Number(apertureSlider.value || 0);
+  countPass.updateAperture(Number(apertureSlider?.value || 0));
+});
+
+apertureMinus?.addEventListener('click', evt => {
+  evt.preventDefault();
+  if (!apertureSlider) {
+    return false;
+  }
+  apertureSlider.value = Math.max(
+    Number(apertureSlider.value) - Number(apertureSlider.step) * 5,
+    Number(apertureSlider.min)
+  ).toString();
+  apertureUniform.value = Number(apertureSlider.value || 0);
+  countPass.updateAperture(Number(apertureSlider?.value || 0));
+});
+
+
 focusSlider?.addEventListener("input", () => {
   focusUniform.value = Number(focusSlider?.value || 0);
+});
+
+focusPlus?.addEventListener('click', evt => {
+  evt.preventDefault();
+  if (!focusSlider) {
+    return false;
+  }
+  focusSlider.value = Math.min(
+    Number(focusSlider.value) + Number(focusSlider.step) * 10,
+    Number(focusSlider.max)
+  ).toString();
+  focusUniform.value = Number(focusSlider.value || 0);
+});
+
+focusMinus?.addEventListener('click', evt => {
+  evt.preventDefault();
+  if (!focusSlider) {
+    return false;
+  }
+  focusSlider.value = Math.max(
+    Number(focusSlider.value) - Number(focusSlider.step) * 10,
+    Number(focusSlider.min)
+  ).toString();
+  focusUniform.value = Number(focusSlider.value || 0);
 });
 
 zoominCheckbox?.addEventListener("input", () => {
