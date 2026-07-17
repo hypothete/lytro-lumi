@@ -330,7 +330,7 @@ function prepareGallery() {
     const fileTex = textureLoader.load(url, () => {
       texNode.value = fileTex;
       texNode.needsUpdate = true;
-      offsetUniform.value.set(0.5, 0.5);
+      offsetUniform.value.set(0,0);
     });
     fileTex.colorSpace = THREE.SRGBColorSpace;
   };

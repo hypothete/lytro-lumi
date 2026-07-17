@@ -14,6 +14,12 @@ export function getGalleryDOM (container: HTMLDivElement, label: HTMLParagraphEl
     thumb.src = item.location.replace("./gallery", "./gallery/thumbs");
     thumb.addEventListener("click", () => {
       label.textContent = item.name;
+      const linkToSrc = document.createElement("a");
+      linkToSrc.href = item.location;
+      linkToSrc.classList.add('source-link');
+      linkToSrc.setAttribute('target', '_blank');
+      linkToSrc.textContent = 'view original';
+      label.appendChild(linkToSrc);
       selectItem(item.location);
     });
     container.appendChild(thumb);

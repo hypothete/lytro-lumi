@@ -1,11 +1,11 @@
 [
-  { "name": "Weeds on a patio", "location": "./gallery/weeds.avif" },
   { "name": "Miniature at the MOMOMoMA in 50 Licks", "location": "./gallery/miniature.avif" },
-  { "name": "Nixie tube clock", "location": "./gallery/nixie.avif" },
-  { "name": "Mannequins in the window at Red Light Clothing", "location": "./gallery/redlight.avif" },
   { "name": "A rose in Ladd's Addition", "location": "./gallery/rose.avif" },
-  { "name": "Guitar at Tanner Springs Park", "location": "./gallery/guitar.avif" },
+  { "name": "Nixie tube clock", "location": "./gallery/nixie.avif" },
   { "name": "Reflector outside OHSU CHH1", "location": "./gallery/reflector.avif" },
+  { "name": "Weeds on a patio", "location": "./gallery/weeds.avif" },
+  { "name": "Mannequins in the window at Red Light Clothing", "location": "./gallery/redlight.avif" },
+  { "name": "Guitar at Tanner Springs Park", "location": "./gallery/guitar.avif" },
   { "name": "Cheeseburger at Elephants Deli", "location": "./gallery/boiga.avif" },
   { "name": "Flowers in the Hawthorne neighborhood", "location": "./gallery/hawthorne.avif" },
   { "name": "Umbrellas at Cartopia food cart pod", "location": "./gallery/umbrellas.avif" },
@@ -18,6 +18,7 @@
   { "name": "Ashtray and stone cross on a deck", "location": "./gallery/ashtray.avif" },
   { "name": "Sign inside Jackpot Records", "location": "./gallery/jackpot.avif" },
   { "name": "Looking north on the Willamette River", "location": "./gallery/river.avif" },
+  { "name": "Strange moire in the window", "location": "./gallery/window.avif" },
   { "name": "Daisies in Ladd's Addition", "location": "./gallery/daisies.avif" },
   { "name": "At the doctor", "location": "./gallery/doctor.avif" },
   { "name": "Bike valet parking at OHSU", "location": "./gallery/bikes.avif" },
@@ -27,6 +28,5 @@
   { "name": "Water droplets in my shower", "location": "./gallery/drops.avif" },
   { "name": "Suncatcher in my window", "location": "./gallery/suncatcher.avif" },
   { "name": "Antique truck in Ladd's Addition", "location": "./gallery/truck.avif" },
-  { "name": "Strange moire in the window", "location": "./gallery/window.avif" },
   { "name": "Toys and gadgets on my desk", "location": "./gallery/desk.avif" }
 ]

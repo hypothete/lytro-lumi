@@ -18,11 +18,20 @@ a:visited {
   color: #999;
 }
 
+p {
+  width: 100%;
+  text-align: left;
+  max-width: 60rem;
+  margin-bottom: 1rem;
+  margin-top: 0;
+}
+
 main {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
   align-items: center;
+  width: 100%;
 }
 
 #three > canvas {
@@ -35,8 +44,8 @@ main {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin: 2rem 2rem;
-  max-width: 55rem;
+  margin: 1rem 2rem;
+  max-width: 60rem;
 }
 
 #controls > * {
@@ -44,7 +53,23 @@ main {
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 100%;
+}
+
+#explanation {
+  margin: 0 2rem 2rem;
+  max-width: 60rem;
+}
+
+footer {
+  margin: 1rem 2rem 4rem;
+  max-width: 60rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+footer > a {
+  margin: 0 2rem;
 }
 
 label, .range-control {
@@ -52,6 +77,10 @@ label, .range-control {
   flex-direction: row;
   align-items: center;
   font-weight: bold;
+}
+
+.range-control {
+  width: 100%;
 }
 
 input[type="checkbox"] {
@@ -62,7 +91,7 @@ input[type="checkbox"] {
 
 input[type="range"] {
   width: inherit;
-  max-width: 50rem;
+  max-width: 56rem;
 }
 
 button {
@@ -108,25 +137,33 @@ button {
 
 #gallery {
   display: block;
+  max-width: 48rem;
 }
 
 #gallery-label {
   text-align: center;
+  margin: 2rem 0 2rem;
 }
 
 #gallery-container {
   height: 200px;
   overflow-x: scroll;
   overflow-y: hidden;
-  width: 100%;
   display: flex;
   flex-direction: row;
+  max-width: 100%;
 }
 
 .gallery-item {
   width: 200px;
   height: 200px;
   cursor: pointer;
+}
+
+.source-link {
+  font-weight: 400;
+  font-style: italic;
+  margin-left: 1rem;
 }
 
 @media screen and (orientation: landscape) {

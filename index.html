@@ -3,43 +3,75 @@
   <head>
     <meta charset="UTF-8" />
     <meta property="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta property="og:title" content="lytro-lumi">
-    <meta name="description" content="Lumigraph for viewing Lytro photos">
-    <meta property="og:description" content="Lumigraph for viewing Lytro photos">
-    <meta property="og:image" content="./flowers-closeup.jpg">
+    <meta property="og:title" content="lytro-lumi" />
+    <meta name="description" content="Lumigraph for viewing Lytro photos" />
+    <meta
+      property="og:description"
+      content="Lumigraph for viewing Lytro photos"
+    />
+    <meta property="og:image" content="./flowers-closeup.jpg" />
     <title>lytro-lumi: lumigraph for viewing Lytro photos</title>
   </head>
   <body>
     <main>
       <div id="three"></div>
-        <div id="controls">
-          <div id="gallery">
-            <p id="gallery-label"></p>
-            <div id="gallery-container"></div>
-          </div>
-          <div class="range-control">
-            <button class="range-button" id="aperture-minus">-</button>
-            <input type="range" id="aperture" min="0" max="100" step="1"/>
-            <button class="range-button" id="aperture-plus">+</button>
-            <span>Aperture</span>
-          </div>
-          <div class="range-control">
-            <button class="range-button" id="focus-minus">-</button>
-            <input type="range" id="focus" min="-1" max="1" value="0" step="0.01"/>
-            <button class="range-button" id="focus-plus">+</button>
-            <span>Focal Distance</span>
-          </div>
-          <div>
-            <label><input type="checkbox" id="zoomin"><span>Zoom in?</span></label>
-            <button id="record">Record video</button>
-            <a href="" id="download" download="lumi.webm"></a>
-          </div>
-          <p>
-            Click or touch and drag to shift the perspective of the image. Different focal distances can cause the parallax to be stronger or weaker.
-          </p>
-          <a href="https://github.com/hypothete/lytro-lumi">Learn more on GitHub</a>
+      <div id="controls">
+        <div id="gallery">
+          <p id="gallery-label"></p>
+          <div id="gallery-container"></div>
         </div>
+        <div class="range-control">
+          <button class="range-button" id="aperture-minus">-</button>
+          <input type="range" id="aperture" min="0" max="100" step="1" />
+          <button class="range-button" id="aperture-plus">+</button>
+          <span>Aperture</span>
+        </div>
+        <div class="range-control">
+          <button class="range-button" id="focus-minus">-</button>
+          <input
+            type="range"
+            id="focus"
+            min="-1"
+            max="1"
+            value="0"
+            step="0.01"
+          />
+          <button class="range-button" id="focus-plus">+</button>
+          <span>Focal Distance</span>
+        </div>
+        <div>
+          <label
+            ><input type="checkbox" id="zoomin" /><span>Zoom in?</span></label
+          >
+          <button id="record">Record video</button>
+          <a href="" id="download" download="lumi.webm"></a>
+        </div>
+      </div>
+      <div id="explanation">
+        <h3>
+          lytro-lumi: My entry for the 2026
+          <a
+            href="https://bsky.app/profile/shittychallenge.bsky.social"
+            target=""
+            _blank
+            >#shittycamerachallenge</a
+          >!
+        </h3>
+        <p>Click or touch and drag to change the perspective of the photo.</p>
+        <p>
+          By adjusting the focal distance and aperture, you can make different
+          areas of the photo sharper or more blurry. A small aperture will make
+          more of the scene come into focus, while a wider aperture allows for
+          more dramatic focus.
+        </p>
+      </div>
     </main>
+    <footer>
+      <a href="https://github.com/hypothete/lytro-lumi">Learn more on GitHub</a>
+      <a href="https://bsky.app/profile/erinholographic.bsky.social" target="_blank"
+        >Follow me on Bluesky</a
+      >
+    </footer>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
