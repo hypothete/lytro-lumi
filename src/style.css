@@ -137,12 +137,12 @@ button {
 
 #gallery {
   display: block;
-  max-width: 48rem;
+  max-width: 56rem;
 }
 
 #gallery-label {
-  text-align: center;
-  margin: 2rem 0 2rem;
+  margin-top: 1rem;
+  justify-content: center;
 }
 
 #gallery-container {
@@ -190,6 +190,10 @@ button {
     height: 36px;
     font-size: 18px;
   }
+
+  #gallery {
+  max-width: 48rem;
+}
 
   #gallery-container {
     height: 100px;
