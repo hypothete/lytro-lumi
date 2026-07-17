@@ -25,9 +25,12 @@ const apertureSlider: HTMLInputElement | null =
   document.querySelector("#aperture");
 const focusSlider: HTMLInputElement | null = document.querySelector("#focus");
 const recordBtn: HTMLButtonElement | null = document.querySelector("#record");
-const downloadLink: HTMLAnchorElement | null = document.querySelector("#download");
-const galleryContainer: HTMLDivElement | null = document.body.querySelector("#gallery-container");
-const galleryLabel: HTMLParagraphElement | null = document.body.querySelector("#gallery-label");
+const downloadLink: HTMLAnchorElement | null =
+  document.querySelector("#download");
+const galleryContainer: HTMLDivElement | null =
+  document.body.querySelector("#gallery-container");
+const galleryLabel: HTMLParagraphElement | null =
+  document.body.querySelector("#gallery-label");
 
 if (!threeDiv) {
   throw new Error("The DOM is broken");
@@ -46,9 +49,9 @@ const clearDownload = () => {
   if (!downloadLink) {
     return;
   }
-  downloadLink.setAttribute('href', '');
-  downloadLink.textContent = '';
-}
+  downloadLink.setAttribute("href", "");
+  downloadLink.textContent = "";
+};
 
 // Renderer setup
 
@@ -63,10 +66,6 @@ const camera = new THREE.OrthographicCamera(
 );
 
 let mouseClicked = false;
-
-let swirlAnimation = true;
-let swirlAngle = 0;
-let swirlTimer: number;
 
 let recorder: MediaRecorder;
 let recording = false;
@@ -96,9 +95,7 @@ imgTex.colorSpace = THREE.SRGBColorSpace;
 
 const focusUniform = uniform(Number(focusSlider?.value || 0));
 const apertureUniform = uniform(Number(apertureSlider?.value || 1));
-const offsetUniform = uniform(
-  new THREE.Vector2(0),
-);
+const offsetUniform = uniform(new THREE.Vector2(0));
 
 const { dots, flatDots } = buildDots();
 const dotsArray = instancedArray(flatDots, "vec2");
@@ -147,24 +144,21 @@ const countPass = overlapPass(scene, camera, {
 renderPipeline.outputNode = scenePass.div(countPass.r);
 
 function render(timestamp: number) {
-  if (swirlAnimation) {
-    swirlAngle -= 0.02;
-    if (swirlAngle < 0) {
-      swirlAngle = Math.PI * 2;
-    }
-    offsetUniform.value.set(Math.cos(swirlAngle) / 2, Math.sin(swirlAngle) / 2);
-  } else if (recording) {
+  if (recording) {
     if (recordStart === 0) {
       recordStart = timestamp;
       recorder.start();
     }
     recordDuration = timestamp - recordStart;
     recordingAngle = Math.PI * 2 - recordDuration / (30 * 10);
-    offsetUniform.value.set(Math.cos(recordingAngle) / 2, Math.sin(recordingAngle) / 2);
+    offsetUniform.value.set(
+      Math.cos(recordingAngle) / 2,
+      Math.sin(recordingAngle) / 2,
+    );
     if (recordDuration >= VIDEO_LENGTH) {
       recording = false;
       recorder.stop();
-      console.log('stopping');
+      console.log("stopping");
       return;
     }
   }
@@ -175,7 +169,7 @@ function render(timestamp: number) {
 
 function record() {
   if (!recordBtn || !downloadLink) {
-    throw new Error('Missing DOM for recording')
+    throw new Error("Missing DOM for recording");
   }
 
   if (recording) {
@@ -185,27 +179,24 @@ function record() {
   recording = true;
   recordStart = 0;
   recordingAngle = 0;
-  swirlAnimation = false;
-  clearTimeout(swirlTimer);
   clearDownload();
-  recordBtn.setAttribute('disabled', 'true');
-  recordBtn.textContent = 'Generating WebM video...';
+  recordBtn.setAttribute("disabled", "true");
+  recordBtn.textContent = "Generating WebM video...";
 
   const chunks: Blob[] = [];
   recorder = new MediaRecorder(captureStream, {
     mimeType: 'video/webm; codecs="vp8"',
-    bitsPerSecond: 1600*1024*1024,
+    bitsPerSecond: 1600 * 1024 * 1024,
   });
 
   recorder.onstop = () => {
-    const buggyBlob = new Blob(chunks, { 'type' : 'video/webm; codecs="vp8"' });
+    const buggyBlob = new Blob(chunks, { type: 'video/webm; codecs="vp8"' });
     fixWebmDuration(buggyBlob, recordDuration).then((finalBlob) => {
-      downloadLink.setAttribute('href', URL.createObjectURL(finalBlob));
-      downloadLink.textContent = 'DOWNLOAD';
-      recordBtn.removeAttribute('disabled');
-      recordBtn.textContent = 'Record video';
-      swirlAnimation = true;
-    })
+      downloadLink.setAttribute("href", URL.createObjectURL(finalBlob));
+      downloadLink.textContent = "DOWNLOAD";
+      recordBtn.removeAttribute("disabled");
+      recordBtn.textContent = "Record video";
+    });
   };
 
   recorder.ondataavailable = (e) => {
@@ -230,6 +221,16 @@ zoominCheckbox?.addEventListener("input", () => {
   camera.updateProjectionMatrix();
 });
 
+renderer.domElement.addEventListener("click", (evt) => {
+  const rect = renderer.domElement.getBoundingClientRect();
+  const mouseX = evt.clientX - rect.left;
+  const mouseY = evt.clientY - rect.top;
+  offsetUniform.value.set(
+    (mouseX - HALF_RENDER_SIZE) / RENDER_SIZE,
+    (HALF_RENDER_SIZE - mouseY) / RENDER_SIZE,
+  );
+});
+
 renderer.domElement.addEventListener("mousemove", (evt) => {
   if (!mouseClicked) {
     return;
@@ -245,31 +246,14 @@ renderer.domElement.addEventListener("mousemove", (evt) => {
 
 renderer.domElement.addEventListener("mousedown", () => {
   mouseClicked = true;
-  swirlAnimation = false;
-  if (swirlTimer) {
-    clearTimeout(swirlTimer);
-  }
 });
 
 window.addEventListener("mouseup", () => {
   mouseClicked = false;
-  swirlTimer = setTimeout(() => {
-    if (!recording) {
-      swirlAnimation = true;
-    }
-  }, 5000);
-});
-
-
-renderer.domElement.addEventListener("touchstart", () => {
-  swirlAnimation = false;
-  if (swirlTimer) {
-    clearTimeout(swirlTimer);
-  }
 });
 
 renderer.domElement.addEventListener("touchmove", (evt) => {
-  evt.preventDefault()
+  evt.preventDefault();
   const rect = renderer.domElement.getBoundingClientRect();
   const mouseX = evt.changedTouches[0].clientX - rect.left;
   const mouseY = evt.changedTouches[0].clientY - rect.top;
@@ -279,15 +263,7 @@ renderer.domElement.addEventListener("touchmove", (evt) => {
   );
 });
 
-renderer.domElement.addEventListener("touchend", () => {
-  swirlTimer = setTimeout(() => {
-    if (!recording) {
-      swirlAnimation = true;
-    }
-  }, 5000);
-});
-
-recordBtn?.addEventListener('click', record);
+recordBtn?.addEventListener("click", record);
 
 function prepareGallery() {
   if (!galleryContainer || !galleryLabel) {
@@ -299,6 +275,7 @@ function prepareGallery() {
     const fileTex = textureLoader.load(url, () => {
       texNode.value = fileTex;
       texNode.needsUpdate = true;
+      offsetUniform.value.set(0.5, 0.5);
     });
     fileTex.colorSpace = THREE.SRGBColorSpace;
   };
