@@ -374,6 +374,9 @@ renderer.domElement.addEventListener("drop", (evt) => {
     const fileTex = textureLoader.load(fileUrl, () => {
       texNode.value = fileTex;
       texNode.needsUpdate = true;
+      if (galleryLabel) {
+        galleryLabel.textContent = "";
+      }
     });
     fileTex.colorSpace = THREE.SRGBColorSpace;
   } else {
