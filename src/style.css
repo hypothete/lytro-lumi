@@ -131,6 +131,12 @@ button {
   border-radius: 16px;
 }
 
+#record-mode {
+  margin-left: 3rem;
+  font-size: 18px;
+  font-weight: bold;
+}
+
 #download {
   margin-left: 1rem;
 }

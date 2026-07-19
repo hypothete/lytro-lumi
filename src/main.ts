@@ -18,16 +18,27 @@ import { buildDots } from "./dots";
 import { overlapPass } from "./overlapPass";
 import { getGalleryDOM } from "./gallery";
 
+enum RecordType {
+  circle = "circle",
+  leftright = "leftright",
+  updown = "updown",
+  focus = "focus",
+}
+
 const threeDiv: HTMLDivElement | null = document.body.querySelector("#three");
 const zoominCheckbox: HTMLInputElement | null =
   document.querySelector("#zoomin");
 const apertureSlider: HTMLInputElement | null =
   document.querySelector("#aperture");
 const focusSlider: HTMLInputElement | null = document.querySelector("#focus");
-const focusPlus: HTMLButtonElement | null = document.querySelector("#focus-plus");
-const focusMinus: HTMLButtonElement | null = document.querySelector("#focus-minus");
-const aperturePlus: HTMLButtonElement | null = document.querySelector("#aperture-plus");
-const apertureMinus: HTMLButtonElement | null = document.querySelector("#aperture-minus");
+const focusPlus: HTMLButtonElement | null =
+  document.querySelector("#focus-plus");
+const focusMinus: HTMLButtonElement | null =
+  document.querySelector("#focus-minus");
+const aperturePlus: HTMLButtonElement | null =
+  document.querySelector("#aperture-plus");
+const apertureMinus: HTMLButtonElement | null =
+  document.querySelector("#aperture-minus");
 const recordBtn: HTMLButtonElement | null = document.querySelector("#record");
 const downloadLink: HTMLAnchorElement | null =
   document.querySelector("#download");
@@ -35,6 +46,8 @@ const galleryContainer: HTMLDivElement | null =
   document.body.querySelector("#gallery-container");
 const galleryLabel: HTMLParagraphElement | null =
   document.body.querySelector("#gallery-label");
+const recordSelect: HTMLSelectElement | null =
+  document.querySelector("#record-mode");
 
 if (!threeDiv) {
   throw new Error("The DOM is broken");
@@ -155,10 +168,29 @@ function render(timestamp: number) {
     }
     recordDuration = timestamp - recordStart;
     recordingAngle = Math.PI * 2 - recordDuration / (30 * 10);
-    offsetUniform.value.set(
-      Math.cos(recordingAngle) / 2,
-      Math.sin(recordingAngle) / 2,
-    );
+    switch ((recordSelect?.value as RecordType) || RecordType.circle) {
+      case RecordType.circle: {
+        offsetUniform.value.set(
+          Math.cos(recordingAngle) / 2,
+          Math.sin(recordingAngle) / 2,
+        );
+        break;
+      }
+      case RecordType.leftright: {
+        offsetUniform.value.set(Math.cos(recordingAngle) / 2, 0);
+        break;
+      }
+      case RecordType.updown: {
+        offsetUniform.value.set(0, Math.sin(recordingAngle) / 2);
+        break;
+      }
+      case RecordType.focus: {
+        offsetUniform.value.set(0, 0);
+        focusUniform.value = Math.sin(recordingAngle) / 2;
+        break;
+      }
+      default:
+    }
     if (recordDuration >= VIDEO_LENGTH) {
       recording = false;
       recorder.stop();
@@ -215,57 +247,56 @@ apertureSlider?.addEventListener("input", () => {
   countPass.updateAperture(Number(apertureSlider?.value || 0));
 });
 
-aperturePlus?.addEventListener('click', evt => {
+aperturePlus?.addEventListener("click", (evt) => {
   evt.preventDefault();
   if (!apertureSlider) {
     return false;
   }
   apertureSlider.value = Math.min(
     Number(apertureSlider.value) + Number(apertureSlider.step) * 5,
-    Number(apertureSlider.max)
+    Number(apertureSlider.max),
   ).toString();
   apertureUniform.value = Number(apertureSlider.value || 0);
   countPass.updateAperture(Number(apertureSlider?.value || 0));
 });
 
-apertureMinus?.addEventListener('click', evt => {
+apertureMinus?.addEventListener("click", (evt) => {
   evt.preventDefault();
   if (!apertureSlider) {
     return false;
   }
   apertureSlider.value = Math.max(
     Number(apertureSlider.value) - Number(apertureSlider.step) * 5,
-    Number(apertureSlider.min)
+    Number(apertureSlider.min),
   ).toString();
   apertureUniform.value = Number(apertureSlider.value || 0);
   countPass.updateAperture(Number(apertureSlider?.value || 0));
 });
 
-
 focusSlider?.addEventListener("input", () => {
   focusUniform.value = Number(focusSlider?.value || 0);
 });
 
-focusPlus?.addEventListener('click', evt => {
+focusPlus?.addEventListener("click", (evt) => {
   evt.preventDefault();
   if (!focusSlider) {
     return false;
   }
   focusSlider.value = Math.min(
     Number(focusSlider.value) + Number(focusSlider.step) * 10,
-    Number(focusSlider.max)
+    Number(focusSlider.max),
   ).toString();
   focusUniform.value = Number(focusSlider.value || 0);
 });
 
-focusMinus?.addEventListener('click', evt => {
+focusMinus?.addEventListener("click", (evt) => {
   evt.preventDefault();
   if (!focusSlider) {
     return false;
   }
   focusSlider.value = Math.max(
     Number(focusSlider.value) - Number(focusSlider.step) * 10,
-    Number(focusSlider.min)
+    Number(focusSlider.min),
   ).toString();
   focusUniform.value = Number(focusSlider.value || 0);
 });
@@ -330,7 +361,7 @@ function prepareGallery() {
     const fileTex = textureLoader.load(url, () => {
       texNode.value = fileTex;
       texNode.needsUpdate = true;
-      offsetUniform.value.set(0,0);
+      offsetUniform.value.set(0, 0);
     });
     fileTex.colorSpace = THREE.SRGBColorSpace;
   };
