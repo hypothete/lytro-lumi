@@ -131,8 +131,12 @@ button {
   border-radius: 16px;
 }
 
-#record-mode {
+#record-label {
   margin-left: 3rem;
+}
+
+#record-mode {
+  margin-left: 1rem;
   font-size: 18px;
   font-weight: bold;
 }

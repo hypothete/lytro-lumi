@@ -1,32 +1,172 @@
 [
-  { "name": "Miniature at the MOMOMoMA in 50 Licks", "location": "./gallery/miniature.avif" },
-  { "name": "A rose in Ladd's Addition", "location": "./gallery/rose.avif" },
-  { "name": "Nixie tube clock", "location": "./gallery/nixie.avif" },
-  { "name": "Reflector outside OHSU CHH1", "location": "./gallery/reflector.avif" },
-  { "name": "Weeds on a patio", "location": "./gallery/weeds.avif" },
-  { "name": "Mannequins in the window at Red Light Clothing", "location": "./gallery/redlight.avif" },
-  { "name": "Guitar at Tanner Springs Park", "location": "./gallery/guitar.avif" },
-  { "name": "Cheeseburger at Elephants Deli", "location": "./gallery/boiga.avif" },
-  { "name": "Flowers in the Hawthorne neighborhood", "location": "./gallery/hawthorne.avif" },
-  { "name": "Umbrellas at Cartopia food cart pod", "location": "./gallery/umbrellas.avif" },
-  { "name": "21st Avenue at sunset", "location": "./gallery/21st.avif" },
-  { "name": "Yours truly in her bedroom mirror", "location": "./gallery/creepy.avif" },
-  { "name": "Fireworks at Oaks Park", "location": "./gallery/fireworks.avif" },
-  { "name": "Flower basket hanging below OHSU CHH2", "location": "./gallery/ohsu.avif" },
-  { "name": "Wine bottle at Tanner Springs Park", "location": "./gallery/bottle.avif" },
-  { "name": "Bamboo at the Cartopia food cart pod", "location": "./gallery/bamboo.avif" },
-  { "name": "Ashtray and stone cross on a deck", "location": "./gallery/ashtray.avif" },
-  { "name": "Sign inside Jackpot Records", "location": "./gallery/jackpot.avif" },
-  { "name": "Looking north on the Willamette River", "location": "./gallery/river.avif" },
-  { "name": "Strange moire in the window", "location": "./gallery/window.avif" },
-  { "name": "Daisies in Ladd's Addition", "location": "./gallery/daisies.avif" },
-  { "name": "At the doctor", "location": "./gallery/doctor.avif" },
-  { "name": "Bike valet parking at OHSU", "location": "./gallery/bikes.avif" },
-  { "name": "Dinner at Bare Bones", "location": "./gallery/barebones.avif" },
-  { "name": "Glass with ice at Rhinestone", "location": "./gallery/ice.avif" },
-  { "name": "Blackberries at Gabriel Park", "location": "./gallery/blackberries.avif" },
-  { "name": "Water droplets in my shower", "location": "./gallery/drops.avif" },
-  { "name": "Suncatcher in my window", "location": "./gallery/suncatcher.avif" },
-  { "name": "Antique truck in Ladd's Addition", "location": "./gallery/truck.avif" },
-  { "name": "Toys and gadgets on my desk", "location": "./gallery/desk.avif" }
+  {
+    "date": "2026-07-17",
+    "name": "Through a hole in a leaf",
+    "location": "./gallery/leaf-hole.avif"
+  },
+  {
+    "date": "2026-07-17",
+    "name": "Couple at the Trans Family Reunion Picnic",
+    "location": "./gallery/t4t.avif"
+  },
+  {
+    "date": "2026-07-17",
+    "name": "Peeking over a pole at the Trans Family Reunion Picnic",
+    "location": "./gallery/pole.avif"
+  },
+  {
+    "date": "2026-07-17",
+    "name": "Overlook Park through a baseball backstop",
+    "location": "./gallery/backstop.avif"
+  },
+  {
+    "date": "2026-07-15",
+    "name": "Nixie tube clock",
+    "location": "./gallery/nixie.avif"
+  },
+  {
+    "date": "2026-07-15",
+    "name": "21st Avenue at sunset",
+    "location": "./gallery/21st.avif"
+  },
+  {
+    "date": "2026-07-15",
+    "name": "Weeds on a patio",
+    "location": "./gallery/weeds.avif"
+  },
+  {
+    "date": "2026-07-15",
+    "name": "Guitar at Tanner Springs Park",
+    "location": "./gallery/guitar.avif"
+  },
+  {
+    "date": "2026-07-15",
+    "name": "Wine bottle at Tanner Springs Park",
+    "location": "./gallery/bottle.avif"
+  },
+  {
+    "date": "2026-07-15",
+    "name": "Reflector outside OHSU CHH1",
+    "location": "./gallery/reflector.avif"
+  },
+  {
+    "date": "2026-07-15",
+    "name": "Bike valet parking at OHSU",
+    "location": "./gallery/bikes.avif"
+  },
+  {
+    "date": "2026-07-15",
+    "name": "Flower basket hanging below OHSU CHH2",
+    "location": "./gallery/ohsu.avif"
+  },
+  {
+    "date": "2026-07-13",
+    "name": "Umbrellas at Cartopia food cart pod",
+    "location": "./gallery/umbrellas.avif"
+  },
+  {
+    "date": "2026-07-13",
+    "name": "Bamboo at the Cartopia food cart pod",
+    "location": "./gallery/bamboo.avif"
+  },
+  {
+    "date": "2026-07-13",
+    "name": "Glass with ice at Rhinestone",
+    "location": "./gallery/ice.avif"
+  },
+  {
+    "date": "2026-07-13",
+    "name": "Ashtray and stone cross on a deck",
+    "location": "./gallery/ashtray.avif"
+  },
+  {
+    "date": "2026-07-13",
+    "name": "Suncatcher in my window",
+    "location": "./gallery/suncatcher.avif"
+  },
+  {
+    "date": "2026-07-10",
+    "name": "A rose in Ladd's Addition",
+    "location": "./gallery/rose.avif"
+  },
+  {
+    "date": "2026-07-10",
+    "name": "Antique truck in Ladd's Addition",
+    "location": "./gallery/truck.avif"
+  },
+  {
+    "date": "2026-07-10",
+    "name": "Daisies in Ladd's Addition",
+    "location": "./gallery/daisies.avif"
+  },
+  {
+    "date": "2026-07-10",
+    "name": "Yours truly in her bedroom mirror",
+    "location": "./gallery/creepy.avif"
+  },
+  {
+    "date": "2026-07-10",
+    "name": "Water droplets in my shower",
+    "location": "./gallery/drops.avif"
+  },
+  {
+    "date": "2026-07-08",
+    "name": "Dinner at Bare Bones",
+    "location": "./gallery/barebones.avif"
+  },
+  {
+    "date": "2026-07-08",
+    "name": "Miniature at the MOMOMoMA in 50 Licks",
+    "location": "./gallery/miniature.avif"
+  },
+  {
+    "date": "2026-07-04",
+    "name": "Fireworks at Oaks Park",
+    "location": "./gallery/fireworks.avif"
+  },
+  {
+    "date": "2026-07-04",
+    "name": "Looking north on the Willamette River",
+    "location": "./gallery/river.avif"
+  },
+  {
+    "date": "2026-07-03",
+    "name": "Blackberries at Gabriel Park",
+    "location": "./gallery/blackberries.avif"
+  },
+  {
+    "date": "2026-07-02",
+    "name": "Toys and gadgets on my desk",
+    "location": "./gallery/desk.avif"
+  },
+  {
+    "date": "2026-07-02",
+    "name": "Strange moire in the window",
+    "location": "./gallery/window.avif"
+  },
+  {
+    "date": "2026-07-02",
+    "name": "Cheeseburger at Elephants Deli",
+    "location": "./gallery/boiga.avif"
+  },
+  {
+    "date": "2026-07-02",
+    "name": "Sign inside Jackpot Records",
+    "location": "./gallery/jackpot.avif"
+  },
+  {
+    "date": "2026-07-02",
+    "name": "Mannequins in the window at Red Light Clothing",
+    "location": "./gallery/redlight.avif"
+  },
+  {
+    "date": "2026-07-02",
+    "name": "Flowers in the Hawthorne neighborhood",
+    "location": "./gallery/hawthorne.avif"
+  },
+  {
+    "date": "2026-07-02",
+    "name": "At the doctor",
+    "location": "./gallery/doctor.avif"
+  }
 ]
