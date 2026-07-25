@@ -16,6 +16,11 @@
   },
   {
     "date": "2026-07-25",
+    "name": "Sailboats on the Willamette",
+    "location": "./gallery/sailboats.avif"
+  },
+  {
+    "date": "2026-07-25",
     "name": "Stacked rocks on the Southwest Waterfront",
     "location": "./gallery/stacks.avif"
   },
