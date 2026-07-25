@@ -1,5 +1,36 @@
 [
   {
+    "date": "2026-07-25",
+    "name": "Rose City Riveters celebrating Pride",
+    "location": "./gallery/riveters.avif"
+  },
+  {
+    "date": "2026-07-25",
+    "name": "Soccer players on the Providence Park pitch",
+    "location": "./gallery/pitch.avif"
+  },
+  {
+    "date": "2026-07-25",
+    "name": "Portland Thorns fans at the start of a match",
+    "location": "./gallery/thorns.avif"
+  },
+  {
+    "date": "2026-07-25",
+    "name": "Stacked rocks on the Southwest Waterfront",
+    "location": "./gallery/stacks.avif"
+  },
+  {
+    "date": "2026-07-25",
+    "name": "Late in the evening at the Rambler",
+    "location": "./gallery/rambler.avif"
+  },
+  
+  {
+    "date": "2026-07-25",
+    "name": "Owl statue at Pinky's Pizza",
+    "location": "./gallery/owl.avif"
+  },  
+  {
     "date": "2026-07-20",
     "name": "Streamers at the waterfront Pride celebration",
     "location": "./gallery/streamers.avif"
