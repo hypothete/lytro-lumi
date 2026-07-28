@@ -16,7 +16,7 @@ import "./style.css";
 import "./range.css";
 import { buildDots } from "./dots";
 import { overlapPass } from "./overlapPass";
-import { getGalleryDOM } from "./gallery";
+import { items as galleryItems, getGalleryDOM, makeGalleryLabel } from "./gallery";
 
 enum RecordType {
   circle = "circle",
@@ -107,8 +107,11 @@ const rgbMaterial = new THREE.MeshBasicNodeMaterial({
 });
 
 const textureLoader = new THREE.TextureLoader();
-const imgTex = textureLoader.load("./test.avif");
+const imgTex = textureLoader.load(galleryItems[0].location);
 imgTex.colorSpace = THREE.SRGBColorSpace;
+if (galleryLabel) {
+  makeGalleryLabel(galleryLabel, galleryItems[0]);
+}
 
 const focusUniform = uniform(Number(focusSlider?.value || 0));
 const apertureUniform = uniform(Number(apertureSlider?.value || 1));
