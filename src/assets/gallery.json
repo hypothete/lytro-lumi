@@ -1,5 +1,35 @@
 [
   {
+    "date": "2026-07-27",
+    "name": "Artichoke in Buckman",
+    "location": "./gallery/artichoke.avif"
+  },
+  {
+    "date": "2026-07-27",
+    "name": "Fairy garden in Buckman",
+    "location": "./gallery/fairygarden.avif"
+  },
+  {
+    "date": "2026-07-27",
+    "name": "Lavender in Northwest Portland",
+    "location": "./gallery/lavender.avif"
+  },
+  {
+    "date": "2026-07-27",
+    "name": "Window in the Witch's Castle",
+    "location": "./gallery/witchwindow.avif"
+  },
+  {
+    "date": "2026-07-27",
+    "name": "Lens flare in Forest Park",
+    "location": "./gallery/lensflare.avif"
+  },
+  {
+    "date": "2026-07-27",
+    "name": "Spiderweb in Forest Park",
+    "location": "./gallery/web.avif"
+  },
+  {
     "date": "2026-07-25",
     "name": "Rose City Riveters celebrating Pride",
     "location": "./gallery/riveters.avif"
