@@ -10,8 +10,8 @@ export function buildDots() {
   for (let j = 0; j < side; j += dY) {
     for (let i = 0; i < side; i += pixSize) {
       const dot = transformPoint(
-        i + (offsetRow ? halfPix : 0),
-        j,
+        i + (offsetRow ? halfPix : 0) + 0.5,
+        j + 0.5,
         -9.0149688720703146e-6,
         -1.73464024066925e-6,
         0.00085002812556922436,
