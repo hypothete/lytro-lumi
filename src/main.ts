@@ -16,7 +16,11 @@ import "./style.css";
 import "./range.css";
 import { buildDots } from "./dots";
 import { overlapPass } from "./overlapPass";
-import { items as galleryItems, getGalleryDOM, makeGalleryLabel } from "./gallery";
+import {
+  items as galleryItems,
+  getGalleryDOM,
+  makeGalleryLabel,
+} from "./gallery";
 
 enum RecordType {
   circle = "circle",
@@ -441,3 +445,27 @@ window.addEventListener("drop", (evt) => {
     evt.preventDefault();
   }
 });
+
+declare global {
+  interface Window {
+    renderLG: () => void;
+  }
+}
+
+window.renderLG = () => {
+  let i = 0;
+  const renderInterval = setInterval(() => {
+    offsetUniform.value.set(2 * (i / 48) - 1, 0);
+    renderPipeline.render();
+    const bodyLink: HTMLAnchorElement = document.createElement("a");
+    bodyLink.setAttribute("target", "_blank");
+    bodyLink.setAttribute("href", renderer.domElement.toDataURL());
+    bodyLink.setAttribute("download", i + ".png");
+    bodyLink.textContent = "#" + i;
+    galleryLabel?.appendChild(bodyLink);
+    i++;
+    if (i >= 48) {
+      clearInterval(renderInterval);
+    }
+  }, 250);
+};
