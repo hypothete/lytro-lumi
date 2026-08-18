@@ -453,19 +453,39 @@ declare global {
 }
 
 window.renderLG = () => {
+  const offscreen = new OffscreenCanvas(6400, 6396);
+  const otx = offscreen.getContext("2d");
   let i = 0;
   const renderInterval = setInterval(() => {
     offsetUniform.value.set(2 * (i / 48) - 1, 0);
     renderPipeline.render();
-    const bodyLink: HTMLAnchorElement = document.createElement("a");
-    bodyLink.setAttribute("target", "_blank");
-    bodyLink.setAttribute("href", renderer.domElement.toDataURL());
-    bodyLink.setAttribute("download", i + ".png");
-    bodyLink.textContent = "#" + i;
-    galleryLabel?.appendChild(bodyLink);
+    const u = (i % 8) * 800;
+    const v = 6396 - ((Math.floor(i / 8) % 6) + 1) * 1066;
+    otx?.drawImage(
+      renderer.domElement,
+      RENDER_SIZE * 0.125,
+      0,
+      RENDER_SIZE * 0.75,
+      RENDER_SIZE,
+      u,
+      v,
+      800,
+      1066,
+    );
     i++;
     if (i >= 48) {
       clearInterval(renderInterval);
+      offscreen.convertToBlob({
+        quality: 0.9,
+        type: 'image/jpeg'
+      }).then((offBlob) => {
+        const bodyLink: HTMLAnchorElement = document.createElement("a");
+        bodyLink.setAttribute("target", "_blank");
+        bodyLink.setAttribute("href", URL.createObjectURL(offBlob));
+        bodyLink.setAttribute("download", "quilt.jpg");
+        bodyLink.textContent = "quilt";
+        galleryLabel?.appendChild(bodyLink);
+      });
     }
   }, 250);
 };

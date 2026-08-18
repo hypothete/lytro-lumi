@@ -1,5 +1,35 @@
 [
   {
+    "date": "2026-08-16",
+    "name": "Barnacles at Proposal Rock",
+    "location": "./gallery/barnacles.avif"
+  },
+  {
+    "date": "2026-08-16",
+    "name": "Playing with toy frogs",
+    "location": "./gallery/frogs.avif"
+  },
+  {
+    "date": "2026-08-16",
+    "name": "Maggie being curious",
+    "location": "./gallery/maggie.avif"
+  },
+  {
+    "date": "2026-08-16",
+    "name": "Matilija poppies at The Cafe on Hawk Creek",
+    "location": "./gallery/matilija.avif"
+  },
+  {
+    "date": "2026-08-16",
+    "name": "Mushrooms at Sitka Sedge Natural Area",
+    "location": "./gallery/mushrooms.avif"
+  },
+  {
+    "date": "2026-08-16",
+    "name": "Looking out at the Pacific from Neskowin",
+    "location": "./gallery/sand.avif"
+  },  
+  {
     "date": "2026-08-01",
     "name": "Performance by local synth band Lotus Grrl",
     "location": "./gallery/lotusgrrl.avif"
